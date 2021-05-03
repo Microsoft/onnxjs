@@ -53,6 +53,8 @@ export declare namespace Graph {
   export interface Transformer {
     removeAllIdentityNodes(): void;
     removeAllDropoutNodes(): void;
+
+    fuseConvActivationNodes(): void;
     // TODO: add generic functions to manipulate the graph
   }
 
@@ -559,6 +561,7 @@ class GraphImpl implements Graph, Graph.Transformer {
     // apply common transform
     this.removeAllIdentityNodes();
     this.removeAllDropoutNodes();
+    this.fuseConvActivationNodes();
 
     // apply initializer specific transform
     if (graphInitializer) {
@@ -734,6 +737,29 @@ class GraphImpl implements Graph, Graph.Transformer {
         this.deleteNode(nodeIndex);
       }
       nodeIndex++;
+    }
+  }
+
+  isActivation(n: Node): boolean {
+    switch (n.opType) {
+      // TODO: add other activation methods
+      case 'Relu':
+      case 'Sigmoid':
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  fuseConvActivationNodes() {
+    for (const node of this._nodes) {
+      if (node.opType === 'Conv') {
+        const next = this._allData[node.outputs[0]]._to;
+        if (next.length === 1 && this.isActivation(this._nodes[next[0]])) {
+          node.attributes.set('__internal_activation', 'string', (this._nodes[next[0]].opType));
+          this.deleteNode(next[0]);
+        }
+      }
     }
   }
 }
