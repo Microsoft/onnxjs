@@ -17,6 +17,7 @@ import {CpuGather} from './ops/gather';
 import {CpuGemm} from './ops/gemm';
 import {CpuImageScaler} from './ops/image-scaler';
 import {CpuInstanceNormalization} from './ops/instance-normalization';
+import {CpuLogSoftmax} from './ops/log-softmax';
 import {CpuLrn} from './ops/lrn';
 import {CpuMatMul} from './ops/matmul';
 import {CpuPad} from './ops/pad';
@@ -73,6 +74,7 @@ export const CPU_OP_RESOLVE_RULES: ReadonlyArray<OpSet.ResolveRule> = [
   ['LeakyRelu', '', '6+', () => new CpuUnaryOp(FLOAT_TYPES, unaryOps.leakyRelu, unaryOps.leakyReluInitializer)],
   ['Less', '', '7+', () => new CpuBinaryOp(NUMBER_TYPES, (a, b) => a < b ? 1 : 0, undefined, 'bool')],
   ['Log', '', '6+', () => new CpuUnaryOp(FLOAT_TYPES, unaryOps.log)],
+  ['LogSoftmax', '', '1+', () => new CpuLogSoftmax()],
   ['LRN', '', '1+', () => new CpuLrn()],
   ['MatMul', '', '1+', () => new CpuMatMul()],
   ['MaxPool', '', '1-9', () => new CpuMaxPool()],  // TODO: support new attributes for MaxPool-8 and MaxPool-10
