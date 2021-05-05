@@ -10,7 +10,13 @@ module.exports = (env, argv) => {
     resolve: {extensions: ['.ts', '.js']},
     plugins: [new webpack.WatchIgnorePlugin([/\.js$/, /\.d\.ts$/])],
     module: {rules: [{test: /\.tsx?$/, loader: 'ts-loader'}]},
-    node: {fs: 'empty'}
+    node: {fs: 'empty'},
+    externals: {
+      '../dist/ort-wasm':'onnxWasmBindingJs',
+      '../dist/ort-wasm-threaded':'onnxWasmBindingJs',
+      'perf_hooks':'perf_hooks',
+      'worker_threads':'worker_threads'
+    }
   };
 
   if (bundleMode === 'perf' || bundleMode === 'dev') {

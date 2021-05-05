@@ -409,6 +409,38 @@ export class ProtoUtil {
     }
   }
 
+  static tensorDataTypeStringToEnum(type: string): onnx.TensorProto.DataType {
+    switch (type) {
+      case 'int8':
+        return onnx.TensorProto.DataType.INT8;
+      case 'uint8':
+        return onnx.TensorProto.DataType.UINT8;
+      case 'bool':
+        return onnx.TensorProto.DataType.BOOL;
+      case 'int16':
+        return onnx.TensorProto.DataType.INT16;
+      case 'uint16':
+        return onnx.TensorProto.DataType.UINT16;
+      case 'int32':
+        return onnx.TensorProto.DataType.INT32;
+      case 'uint32':
+        return onnx.TensorProto.DataType.UINT32;
+      case 'float32':
+        return onnx.TensorProto.DataType.FLOAT;
+      case 'float64':
+        return onnx.TensorProto.DataType.DOUBLE;
+      case 'string':
+        return onnx.TensorProto.DataType.STRING;
+      case 'int64':
+        return onnx.TensorProto.DataType.INT64;
+      case 'uint64':
+        return onnx.TensorProto.DataType.UINT64;
+
+      default:
+        throw new Error(`unsupported data type: ${type}`);
+    }
+  }
+
   static tensorDimsFromProto(dims: Array<number|Long>): number[] {
     // get rid of Long type for dims
     return dims.map(d => Long.isLong(d) ? d.toNumber() : d);

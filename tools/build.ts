@@ -3,7 +3,6 @@
 
 import {execSync, spawnSync} from 'child_process';
 import * as fs from 'fs-extra';
-import * as globby from 'globby';
 import npmlog from 'npmlog';
 import * as path from 'path';
 
@@ -22,40 +21,13 @@ const buildBundle = process.argv.indexOf('--build-bundle') !== -1;
 // Path variables
 const ROOT = path.join(__dirname, '..');
 const DEPS = path.join(ROOT, 'deps');
-const DEPS_EIGEN = path.join(DEPS, 'eigen');
-const DEPS_EMSDK = path.join(DEPS, 'emsdk');
-const DEPS_EMSDK_EMSCRIPTEN = path.join(DEPS_EMSDK, 'upstream', 'emscripten');
 const DEPS_ONNX = path.join(DEPS, 'onnx');
-const EMSDK_BIN = path.join(DEPS_EMSDK, 'emsdk');
-const SRC = path.join(ROOT, 'src');
-const SRC_WASM_BUILD_CONFIG = path.join(SRC, 'wasm-build-config.json');
 const TEST = path.join(ROOT, 'test');
 const TEST_DATA = path.join(TEST, 'data');
 const TEST_DATA_NODE = path.join(TEST_DATA, 'node');
 const OUT = path.join(ROOT, 'dist');
-const OUT_WASM_JS = path.join(OUT, 'onnx-wasm.js');
-const OUT_WASM = path.join(OUT, 'onnx-wasm.wasm');
-
-// Emcc (for Wasm) compile flags
-// Add new compiler flags here (if needed)
-const BUILD_OPTIONS = [
-  '-I' + DEPS_EIGEN,
-  '-DEIGEN_MPL2_ONLY',
-  '-std=c++11',
-  '-s WASM=1',
-  '-s NO_EXIT_RUNTIME=0',
-  '-s ALLOW_MEMORY_GROWTH=1',
-  '-s SAFE_HEAP=0',
-  '-s MODULARIZE=1',
-  '-s SAFE_HEAP_LOG=0',
-  '-s STACK_OVERFLOW_CHECK=0',
-  // '-s DEBUG_LEVEL=0', // DEBUG_LEVEL is disabled in emsdk 1.39.16
-  '-s VERBOSE=0',
-  '-s EXPORT_ALL=0',
-  '-o ' + OUT_WASM_JS,
-  '-O2',
-  '--llvm-lto 3',
-];
+const OUT_WASM_JS = path.join(OUT, 'ort-wasm.js');
+const OUT_WASM = path.join(OUT, 'ort-wasm.wasm');
 
 npmlog.info('Build', 'Initialization completed. Start to build...');
 
@@ -138,75 +110,10 @@ if (!buildWasm) {
     fs.writeFileSync(OUT_WASM_JS, `;throw new Error("please build WebAssembly before use wasm backend.");`);
   }
 } else {
-  // Step 1: emsdk install (if needed)
-  npmlog.info('Build.Wasm', '(1/4) Setting up emsdk...');
-  if (!fs.existsSync(DEPS_EMSDK_EMSCRIPTEN)) {
-    npmlog.info('Build.Wasm', 'Installing emsdk...');
-    const install = spawnSync(`${EMSDK_BIN} install latest`, {shell: true, stdio: 'inherit', cwd: DEPS_EMSDK});
-    if (install.status !== 0) {
-      if (install.error) {
-        console.error(install.error);
-      }
-      process.exit(install.status === null ? undefined : install.status);
-    }
-    npmlog.info('Build.Wasm', 'Installing emsdk... DONE');
-
-    npmlog.info('Build.Wasm', 'Activating emsdk...');
-    const activate = spawnSync(`${EMSDK_BIN} activate latest`, {shell: true, stdio: 'inherit', cwd: DEPS_EMSDK});
-    if (activate.status !== 0) {
-      if (activate.error) {
-        console.error(activate.error);
-      }
-      process.exit(activate.status === null ? undefined : activate.status);
-    }
-    npmlog.info('Build.Wasm', 'Activating emsdk... DONE');
-  }
-  npmlog.info('Build.Wasm', '(1/4) Setting up emsdk... DONE');
-
-  // Step 2: Find path to emcc
-  npmlog.info('Build.Wasm', '(2/4) Find path to emcc...');
-  let emcc = globby.sync('./**/emcc', {cwd: DEPS_EMSDK_EMSCRIPTEN})[0];
-  if (!emcc) {
-    npmlog.error('Build.Wasm', 'Unable to find emcc. Try re-building with --clean-install flag.');
-    process.exit(2);
-  }
-  emcc = path.join(DEPS_EMSDK_EMSCRIPTEN, emcc);
-  npmlog.info('Build.Wasm', `(2/4) Find path to emcc... DONE, emcc: ${emcc}`);
-
-  // Step 3: Prepare build config
-  npmlog.info('Build.Wasm', '(3/4) Preparing build config...');
-  // tslint:disable-next-line:non-literal-require
-  const wasmBuildConfig = require(SRC_WASM_BUILD_CONFIG);
-  const exportedFunctions = wasmBuildConfig.exported_functions as string[];
-  const srcPatterns = wasmBuildConfig.src as string[];
-  if (exportedFunctions.length === 0) {
-    npmlog.error('Build.Wasm', `No exported functions specified in the file: ${SRC_WASM_BUILD_CONFIG}`);
+  if (!fs.existsSync(OUT_WASM)) {
+    npmlog.error('Build.Wasm', 'Please make sure ort-wasm.wasm is built and exists in /dist/');
     process.exit(1);
   }
-
-  BUILD_OPTIONS.push(`-s "EXPORTED_FUNCTIONS=[${exportedFunctions.map(f => `${f}`).join(',')}]"`);
-
-  const cppFileNames = globby.sync(srcPatterns, {cwd: SRC});
-  if (cppFileNames.length === 0) {
-    npmlog.error('Build.Wasm', 'Unable to find any cpp source files to compile and generate the WASM file');
-    process.exit(2);
-  }
-
-  const compileSourcesString = cppFileNames.map(f => path.join(SRC, f)).join(' ');
-  BUILD_OPTIONS.push(compileSourcesString);
-  npmlog.info('Build.Wasm', '(3/4) Preparing build config... DONE');
-
-  // Step 4: Compile the source code to generate the Wasm file
-  npmlog.info('Build.Wasm', '(4/4) Building...');
-  npmlog.info('Build.Wasm', `CMD: ${emcc} ${BUILD_OPTIONS}`);
-
-  const emccBuild = spawnSync(emcc, BUILD_OPTIONS, {shell: true, stdio: 'inherit', cwd: __dirname});
-
-  if (emccBuild.error) {
-    console.error(emccBuild.error);
-    process.exit(emccBuild.status === null ? undefined : emccBuild.status);
-  }
-  npmlog.info('Build.Wasm', '(4/4) Building... DONE');
 }
 npmlog.info('Build', `Building WebAssembly sources... ${buildWasm ? 'DONE' : 'SKIPPED'}`);
 

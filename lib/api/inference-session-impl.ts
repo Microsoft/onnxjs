@@ -50,7 +50,7 @@ export class InferenceSession implements InferenceSessionInterface {
       output = await this.session.run(modelInputFeed);
     } else if (Array.isArray(inputFeed)) {
       const modelInputFeed: InternalTensor[] = [];
-      inputFeed.forEach((value) => {
+      inputFeed.forEach((value: ApiTensor) => {
         modelInputFeed.push(value.internalTensor);
       });
       output = await this.session.run(modelInputFeed);

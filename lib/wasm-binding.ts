@@ -61,7 +61,7 @@ export function init(numWorkers: number, initTimeout: number): Promise<void> {
       initializing = false;
     };
 
-    const bindingInitTask = bindingCore.init();
+    const bindingInitTask = bindingCore.init(numWorkers);
     // a promise that gets rejected after 5s to work around the fact that
     // there is an unrejected promise in the wasm glue logic file when
     // it has some problem instantiating the wasm file
@@ -78,7 +78,8 @@ export function init(numWorkers: number, initTimeout: number): Promise<void> {
       if (areWebWorkersSupported()) {
         Logger.verbose(
             'WebAssembly-Workers', `Environment supports usage of Workers. Will spawn ${numWorkers} Workers`);
-        WORKER_NUMBER = numWorkers;
+        // TODO: This code will be replaced to control the number of WebAssembly threads later.
+        WORKER_NUMBER = 0;
       } else {
         Logger.error('WebAssembly-Workers', 'Environment does not support usage of Workers. Will not spawn workers.');
         WORKER_NUMBER = 0;
