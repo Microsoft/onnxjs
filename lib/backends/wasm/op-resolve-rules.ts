@@ -7,6 +7,7 @@ import {WasmBatchNormalization} from './ops/batch-normalization';
 import {WasmBinaryOp} from './ops/binary-op';
 import {WasmClip} from './ops/clip';
 import {WasmConv} from './ops/conv';
+import {WasmEinsum} from './ops/einsum';
 import {WasmGemm} from './ops/gemm';
 import {WasmInstanceNormalization} from './ops/instance-normalization';
 import {WasmMatMul} from './ops/matmul';
@@ -36,4 +37,5 @@ export const WASM_OP_RESOLVE_RULES: ReadonlyArray<OpSet.ResolveRule> = [
   ['Sub', '', '7+', () => new WasmBinaryOp(['float32', 'int32'], 'Sub')],
   ['Sum', '', '6+', () => new WasmSum()],  // TODO: support multidirectional broadcast for Sum-8
   ['Xor', '', '7+', () => new WasmBinaryOp(['bool'], 'Xor')],
+  ['Einsum', '', '12+', () => new WasmEinsum()],
 ];

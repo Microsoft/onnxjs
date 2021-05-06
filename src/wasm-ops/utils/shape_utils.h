@@ -18,4 +18,7 @@ std::vector<int32_t> offset_to_indices(const std::vector<int32_t> &strides,
 // Fills in values in the indices vector. Assumes it is of the required size.
 void offset_to_indices(const std::vector<int32_t> &strides, size_t offset,
                        std::vector<int32_t> &indices);
+void increment_index(std::vector<int32_t> &index,
+                     const std::vector<int32_t> &dims,
+                     size_t axisToIncrementOn);
 }; // namespace ShapeUtils

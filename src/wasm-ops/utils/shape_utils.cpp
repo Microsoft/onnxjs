@@ -86,3 +86,15 @@ void ShapeUtils::offset_to_indices(const std::vector<int32_t> &strides,
   }
   indices[indices.size() - 1] = offset;
 }
+
+void ShapeUtils::increment_index(std::vector<int32_t> &index,
+                                 const std::vector<int32_t> &dims,
+                                 size_t axisToIncrementOn) {
+  for (size_t i = axisToIncrementOn - 1; i >= 0; --i) {
+    index[i]++;
+    if (index[i] < dims[i]) {
+      break;
+    }
+    index[i] = 0;
+  }
+}

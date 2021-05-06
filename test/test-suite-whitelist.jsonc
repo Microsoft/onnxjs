@@ -225,7 +225,11 @@
       "test_xor_bcast4v4d",
       "test_xor2d",
       "test_xor3d",
-      "test_xor4d"
+      "test_xor4d",
+      "v12/test_einsum_batch_matmul",
+      "v12/test_einsum_inner_prod",
+      "v12/test_einsum_sum",
+      "v12/test_einsum_transpose"
     ],
     "ops": [
       "abs.jsonc",
@@ -268,7 +272,8 @@
       "softmax.jsonc",
       "tan.jsonc",
       "transpose.jsonc",
-      "xor.jsonc"
+      "xor.jsonc",
+      "einsum.jsonc"
     ]
   },
   "webgl": {
@@ -488,7 +493,11 @@
       "test_xor_bcast4v4d",
       "test_xor2d",
       "test_xor3d",
-      "test_xor4d"
+      "test_xor4d",
+      "v12/test_einsum_batch_matmul",
+      "v12/test_einsum_inner_prod",
+      "v12/test_einsum_sum",
+      "v12/test_einsum_transpose"
     ],
     "ops": [
       "abs.jsonc",
@@ -530,7 +539,8 @@
       "sub.jsonc",
       "tan.jsonc",
       "transpose.jsonc",
-      "xor.jsonc"
+      "xor.jsonc",
+      "einsum.jsonc"
     ]
   },
   "wasm": {
@@ -627,7 +637,11 @@
       "test_globalmaxpool_precomputed",
       "test_globalmaxpool",
       "test_instancenorm_epsilon",
-      "test_instancenorm_example"
+      "test_instancenorm_example",
+      "v12/test_einsum_batch_matmul",
+      "v12/test_einsum_inner_prod",
+      "v12/test_einsum_sum",
+      "v12/test_einsum_transpose"
     ],
     "ops": [
       // Check in op tests that have native Wasm implementations
@@ -645,7 +659,8 @@
       "and.jsonc",
       "or.jsonc",
       "xor.jsonc",
-      "matmul.jsonc"
+      "matmul.jsonc",
+      "einsum.jsonc"
     ]
   }
 }

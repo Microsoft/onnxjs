@@ -1,0 +1,235 @@
+[
+  {
+    "name": "Einsum batch matmul",
+    "operator": "Einsum",
+    "opsets": [
+      {
+        "domain": "",
+        "version": 12
+      }
+    ],
+    "attributes": [
+      { "name": "equation", "data": "bij, bjk -> bik", "type": "string" }
+    ],
+    "cases": [
+      {
+        "name": "BMM",
+        "inputs": [
+          {
+            "data": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            "dims": [3, 2, 2],
+            "type": "float32"
+          },
+          {
+            "data": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24
+            ],
+            "dims": [3, 2, 4],
+            "type": "float32"
+          }
+        ],
+        "outputs": [
+          {
+            "data": [
+              11,
+              14,
+              17,
+              20,
+              23,
+              30,
+              37,
+              44,
+              123,
+              134,
+              145,
+              156,
+              167,
+              182,
+              197,
+              212,
+              363,
+              382,
+              401,
+              420,
+              439,
+              462,
+              485,
+              508
+            ],
+            "dims": [3, 2, 4],
+            "type": "float32"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Einsum transpose",
+    "operator": "Einsum",
+    "opsets": [
+      {
+        "domain": "",
+        "version": 12
+      }
+    ],
+    "attributes": [
+      { "name": "equation", "data": "ij -> ji", "type": "string" }
+    ],
+    "cases": [
+      {
+        "name": "Transpose",
+        "inputs": [
+          {
+            "data": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            "dims": [3, 4],
+            "type": "float32"
+          }
+        ],
+        "outputs": [
+          {
+            "data": [1, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12],
+            "dims": [4, 3],
+            "type": "float32"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Einsum inner product",
+    "operator": "Einsum",
+    "opsets": [
+      {
+        "domain": "",
+        "version": 12
+      }
+    ],
+    "attributes": [{ "name": "equation", "data": "i,i", "type": "string" }],
+    "cases": [
+      {
+        "name": "Inner product",
+        "inputs": [
+          {
+            "data": [1, 2, 3, 4, 5],
+            "dims": [5],
+            "type": "float32"
+          },
+          {
+            "data": [1, 2, 3, 4, 5],
+            "dims": [5],
+            "type": "float32"
+          }
+        ],
+        "outputs": [
+          {
+            "data": [55],
+            "dims": [],
+            "type": "float32"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Einsum batch diagonal",
+    "operator": "Einsum",
+    "opsets": [
+      {
+        "domain": "",
+        "version": 12
+      }
+    ],
+    "attributes": [{ "name": "equation", "data": "bii->bi", "type": "string" }],
+    "cases": [
+      {
+        "name": "Diagonal",
+        "inputs": [
+          {
+            "data": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18
+            ],
+            "dims": [2, 3, 3],
+            "type": "float32"
+          }
+        ],
+        "outputs": [
+          {
+            "data": [1, 5, 9, 10, 14, 18],
+            "dims": [2, 3],
+            "type": "float32"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Einsum sum",
+    "operator": "Einsum",
+    "opsets": [
+      {
+        "domain": "",
+        "version": 12
+      }
+    ],
+    "attributes": [{ "name": "equation", "data": "ij->i", "type": "string" }],
+    "cases": [
+      {
+        "name": "Sum",
+        "inputs": [
+          {
+            "data": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            "dims": [3, 4],
+            "type": "float32"
+          }
+        ],
+        "outputs": [
+          {
+            "data": [10, 26, 42],
+            "dims": [3],
+            "type": "float32"
+          }
+        ]
+      }
+    ]
+  }
+]
