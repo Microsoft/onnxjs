@@ -225,7 +225,13 @@
       "test_xor_bcast4v4d",
       "test_xor2d",
       "test_xor3d",
-      "test_xor4d"
+      "test_xor4d",
+      "v{11,12}/test_cumsum_1d_exclusive",
+      "v{11,12}/test_cumsum_1d_reverse",
+      "v{11,12}/test_cumsum_1d_reverse_exclusive",
+      "v{11,12}/test_cumsum_2d_axis_0",
+      "v{11,12}/test_cumsum_2d_axis_1",
+      "v{11,12}/test_cumsum_2d_negative_axis"
     ],
     "ops": [
       "abs.jsonc",
@@ -268,7 +274,8 @@
       "softmax.jsonc",
       "tan.jsonc",
       "transpose.jsonc",
-      "xor.jsonc"
+      "xor.jsonc",
+      "cumsum.jsonc"
     ]
   },
   "webgl": {
@@ -488,7 +495,13 @@
       "test_xor_bcast4v4d",
       "test_xor2d",
       "test_xor3d",
-      "test_xor4d"
+      "test_xor4d",
+      "v{11,12}/test_cumsum_1d_exclusive",
+      "v{11,12}/test_cumsum_1d_reverse",
+      "v{11,12}/test_cumsum_1d_reverse_exclusive",
+      "v{11,12}/test_cumsum_2d_axis_0",
+      "v{11,12}/test_cumsum_2d_axis_1",
+      "v{11,12}/test_cumsum_2d_negative_axis"
     ],
     "ops": [
       "abs.jsonc",
@@ -530,7 +543,8 @@
       "sub.jsonc",
       "tan.jsonc",
       "transpose.jsonc",
-      "xor.jsonc"
+      "xor.jsonc",
+      "cumsum.jsonc"
     ]
   },
   "wasm": {
@@ -627,7 +641,13 @@
       "test_globalmaxpool_precomputed",
       "test_globalmaxpool",
       "test_instancenorm_epsilon",
-      "test_instancenorm_example"
+      "test_instancenorm_example",
+      "v{11,12}/test_cumsum_1d_exclusive",
+      "v{11,12}/test_cumsum_1d_reverse",
+      "v{11,12}/test_cumsum_1d_reverse_exclusive",
+      "v{11,12}/test_cumsum_2d_axis_0",
+      "v{11,12}/test_cumsum_2d_axis_1",
+      "v{11,12}/test_cumsum_2d_negative_axis"
     ],
     "ops": [
       // Check in op tests that have native Wasm implementations
@@ -645,7 +665,8 @@
       "and.jsonc",
       "or.jsonc",
       "xor.jsonc",
-      "matmul.jsonc"
+      "matmul.jsonc",
+      "cumsum.jsonc"
     ]
   }
 }

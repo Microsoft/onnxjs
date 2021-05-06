@@ -10,6 +10,7 @@ import {CpuBinaryOp} from './ops/binary-op';
 import {CpuCast} from './ops/cast';
 import {CpuConcat} from './ops/concat';
 import {CpuConv} from './ops/conv';
+import {CpuCumSum} from './ops/cumsum';
 import {CpuDropout} from './ops/dropout';
 import {CpuExpand} from './ops/expand';
 import {CpuFlatten} from './ops/flatten';
@@ -113,4 +114,5 @@ export const CPU_OP_RESOLVE_RULES: ReadonlyArray<OpSet.ResolveRule> = [
   ['Upsample', '', '7-8', () => new CpuUpsample(7)],
   ['Upsample', '', '9', () => new CpuUpsample(9)],
   ['Xor', '', '7+', () => new CpuBinaryOp(['bool'], (e1, e2) => (e1 ^ e2))],
+  ['CumSum', '', '11+', () => new CpuCumSum()],
 ];

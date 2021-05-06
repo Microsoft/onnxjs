@@ -580,6 +580,35 @@ export class ShapeUtil {
     }
   }
 
+  // Decrement an index into a tensor (in lexicographic
+  // ordering), wrapping around the specified lower bound.
+  /**
+   * Decrement an index into a tensor (in lexicographic ordering), wrapping around the specified upper_bound.
+   * @param index Given index to decrement (Will be mutated)
+   * @param dims The dimensions of the tensor for which the given index corresponds to
+   * @param axisToDecrementOn The 1-indexed axis to decrement on. If undefined, axisToDecrementOn == rank
+   */
+  static decrementIndex(index: number[], dims: ReadonlyArray<number>, axisToDecrementOn?: number) {
+    if (dims.length === 0 || index.length === 0) {
+      throw new Error(`Index decrementing unsupported for scalar Tensor`);
+    }
+    if (axisToDecrementOn === undefined) {
+      axisToDecrementOn = dims.length;
+    } else {
+      if (axisToDecrementOn <= 0 || axisToDecrementOn > dims.length) {
+        throw new Error(`Incorrect axis to decrement on`);
+      }
+    }
+
+    for (let k = axisToDecrementOn - 1; k >= 0; --k) {
+      index[k]--;
+      if (index[k] >= 0) {
+        break;
+      }
+      index[k] = dims[k] - 1;
+    }
+  }
+
   /**
    * Produces a new dimensions array based on the values in the 'originalDimensions' and 'shape' array
    * Used in Reshape

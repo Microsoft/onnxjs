@@ -9,6 +9,7 @@ import * as binaryOps from './ops/binary-op';
 import {WebGLClip} from './ops/clip';
 import {WebGLConcat} from './ops/concat';
 import {WebGLConv} from './ops/conv';
+import {WebGLCumSum} from './ops/cumsum';
 import {WebGLDropout} from './ops/dropout';
 import {WebGLElu} from './ops/elu';
 import {WebGLFlatten} from './ops/flatten';
@@ -109,4 +110,5 @@ export const WEBGL_OP_RESOLVE_RULES: ReadonlyArray<OpSet.ResolveRule> = [
   ['Upsample', '', '9', () => new WebGLUpsample(9)],
   ['Unsqueeze', '', '1+', () => new WebGLUnsqueeze()],
   ['Xor', '', '7+', () => new binaryOps.WebGLBinaryOp(['bool'], binaryOps.glslXor())],
+  ['CumSum', '', '11+', () => new WebGLCumSum()],
 ];

@@ -25,6 +25,7 @@
     "_clip_f32",
     "_instance_normalization_f32",
     "_sum_f32",
-    "_softmax_f32"
+    "_softmax_f32",
+    "_cumsum_f32"
   ]
 }

@@ -86,3 +86,13 @@ void ShapeUtils::offset_to_indices(const std::vector<int32_t> &strides,
   }
   indices[indices.size() - 1] = offset;
 }
+
+size_t ShapeUtils::offset_to_index(const std::vector<int32_t> &strides,
+                                   size_t offset, int32_t axis) {
+  size_t index;
+  for (size_t i = 0; i < axis; ++i) {
+    size_t index = floor(offset / strides[i]);
+    offset -= index * strides[i];
+  }
+  return index;
+}
