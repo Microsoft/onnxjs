@@ -82,7 +82,7 @@ const backendsCache: Map<string, Backend> = new Map();
  */
 export async function Backend(hint?: string|ReadonlyArray<string>): Promise<Backend> {
   if (!hint) {
-    return Backend(['webgl', 'wasm', 'cpu']);
+    return Backend(['webgl', 'mixed', 'wasm', 'cpu']);
   } else {
     const hints = typeof hint === 'string' ? [hint] : hint;
 
