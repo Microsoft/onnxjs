@@ -87,6 +87,7 @@ describe('#UnitTest# - pack - Tensor pack', () => {
         const outputElementCount = getExpectedElementCount(testData.inputShape);
         expect(resultDataBuffer).to.have.lengthOf(outputElementCount);
         const expectedOutput = generateExpected(inputData, testData.inputShape);
+
         expect(resultDataBuffer).to.deep.equal(expectedOutput);
       });
     }
@@ -171,6 +172,7 @@ describe('#UnitTest# - unpack - Tensor unpack', () => {
       const outputElementCount = getExpectedElementCount(testData.inputShape);
 
       expect(resultDataBuffer).to.have.lengthOf(outputElementCount);
+
       expect(result).to.deep.equal(expectedOutput);
     });
   }
@@ -293,6 +295,21 @@ function getTestData(isPacked = true): TestData[] {
         inputTextureShape: [],
         outputTextureShape: [24, 40]
       },
+      // test 6D tensor
+      {
+        elementCount: 32,
+        inputShape: [1, 1, 2, 2, 2, 4],
+        outputShape: [],
+        inputTextureShape: [],
+        outputTextureShape: [4, 2]
+      },
+      {
+        elementCount: 3840,
+        inputShape: [1, 1, 2, 24, 2, 40],
+        outputShape: [],
+        inputTextureShape: [],
+        outputTextureShape: [48, 20]
+      },
     ];
   } else {
     return [
@@ -372,6 +389,23 @@ function getTestData(isPacked = true): TestData[] {
         elementCount: 64,
         inputShape: [2, 2, 4, 4],
         outputShape: [2, 2, 4, 4],
+        inputTextureShape: [2, 8],
+        outputTextureShape: [16, 4],
+        useGeneratedOutput: true,
+      },
+      // test 6d tensor
+      {
+        elementCount: 32,
+        inputShape: [1, 1, 2, 2, 2, 4],
+        outputShape: [1, 1, 2, 2, 2, 4],
+        inputTextureShape: [2, 4],
+        outputTextureShape: [8, 4],
+        useGeneratedOutput: true,
+      },
+      {
+        elementCount: 64,
+        inputShape: [1, 2, 1, 2, 4, 4],
+        outputShape: [1, 2, 1, 2, 4, 4],
         inputTextureShape: [2, 8],
         outputTextureShape: [16, 4],
         useGeneratedOutput: true,

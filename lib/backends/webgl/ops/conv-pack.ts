@@ -15,7 +15,7 @@ import {WebGLReshapePacked} from './reshape-packed';
 export class WebGLConvPacked extends Conv {
   protected artifacts: Artifact[];
   protected programInfo: ProgramInfo[];
-
+  protected outputShape: number[];
   run(inferenceHandler: WebGLInferenceHandler, inputs: Tensor[]): Tensor[] {
     const programManager = inferenceHandler.session.programManager;
     const xshape = inputs[0].dims.slice();
@@ -33,8 +33,8 @@ export class WebGLConvPacked extends Conv {
         `autpPad:${this.autoPad}, dilations:${this.dilations}, group:${this.group}, kernelShape:${
             this.kernelShape}, pads:${this.pads}, strides:${this.strides}`);
 
-    const outputShape = WebGLConv.calcOutputShape(xshape, kshape, this.dilations, this.pads, this.strides);
-    const im2col = new WebGLIm2ColPacked(outputShape, kshape, this.dilations, this.pads, this.strides);
+    this.outputShape = WebGLConv.calcOutputShape(xshape, kshape, this.dilations, this.pads, this.strides);
+    const im2col = new WebGLIm2ColPacked(this.outputShape, kshape, this.dilations, this.pads, this.strides);
     const matmul = new WebGLMatMulPacked();
     const reshape = new WebGLReshapePacked();
     // shape for kernel reshape
@@ -76,11 +76,10 @@ export class WebGLConvPacked extends Conv {
     inferenceHandler.checkAndUpdateTextureForm(this.artifacts[2], runDataMatmul);
     programManager.run(this.artifacts[2], runDataMatmul);
     const matmulOutput = runDataMatmul.outputTextureData.tensor;
-
     // reshape output
     const outputShapeTensor = new Tensor(
-        [outputShape.length], 'int32', undefined, undefined,
-        new Int32Array([outputShape[0], outputShape[1], outputShape[2], outputShape[3]]));
+        [this.outputShape.length], 'int32', undefined, undefined,
+        new Int32Array([this.outputShape[0], this.outputShape[1], this.outputShape[2], this.outputShape[3]]));
 
     assert(this.artifacts.length > 2, () => 'expect at least 3 artifacts created');
     if (this.artifacts.length === 3) {

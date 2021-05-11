@@ -78,6 +78,16 @@ export declare namespace InferenceSession {
        */
       flushIntervalInMilliseconds?: number;
     }
+
+    /**
+     * represent the configuration of the logger that is used in an inference session
+     */
+    export interface Logger {
+      /**
+       * the log level
+       */
+      logLevel?: string;
+    }
   }
 
   /**
@@ -94,6 +104,11 @@ export declare namespace InferenceSession {
      * specify the configuration of the profiler that used in an inference session
      */
     profiler?: Config.Profiler;
+
+    /**
+     * specify the configuration of the logger that used in an inference session
+     */
+    logger?: Config.Logger;
   }
 
   /**

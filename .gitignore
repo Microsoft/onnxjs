@@ -14,6 +14,9 @@
 /tools/**/*.js
 /tools/**/*.js.map
 
+/benchmark/**/node_modules/
+/benchmark/**/dist/
+
 npm-debug.log
 .DS_Store
 yarn-error.log

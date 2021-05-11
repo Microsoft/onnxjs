@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
+import {Logger} from '../instrument';
 import {Session} from '../session';
 import {Tensor as InternalTensor} from '../tensor';
 
@@ -16,7 +17,15 @@ type OutputType = InferenceSessionInterface.OutputType;
 export class InferenceSession implements InferenceSessionInterface {
   session: Session;
   constructor(config?: InferenceSessionInterface.Config) {
-    this.session = new Session(config);
+    const sessionConfig: Session.Config = {};
+    sessionConfig.backendHint = config?.backendHint;
+    sessionConfig.profiler = config?.profiler;
+    if (config?.logger) {
+      const loggerConf = config?.logger;
+      sessionConfig.logger = {};
+      sessionConfig.logger.minimalSeverity = loggerConf.logLevel ? loggerConf.logLevel as Logger.Severity : 'info';
+    }
+    this.session = new Session(sessionConfig);
   }
   loadModel(uri: string): Promise<void>;
   loadModel(blob: Blob): Promise<void>;
