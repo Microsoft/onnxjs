@@ -1,0 +1,136 @@
+[
+  {
+    "name": "topk",
+    "operator": "TopK",
+    "attributes": [
+      { "name": "axis", "data": 0, "type": "int" },
+      { "name": "k", "data": 1, "type": "int" }
+    ],
+    "cases": [
+      {
+        "name": "T[0] k=1",
+        "inputs": [
+          {
+            "data": [-3, 2],
+            "dims": [2],
+            "type": "float32"
+          }
+        ],
+        "outputs": [
+          {
+            "data": [2],
+            "dims": [1],
+            "type": "float32"
+          },
+          {
+            "data": [1],
+            "dims": [1],
+            "type": "int32"
+          }
+        ]
+      },
+      {
+        "name": "T[1] k=1",
+        "inputs": [
+          {
+            "data": [-3, 2, 1, -1],
+            "dims": [2, 2],
+            "type": "float32"
+          }
+        ],
+        "outputs": [
+          {
+            "data": [1, 2],
+            "dims": [1, 2],
+            "type": "float32"
+          },
+          {
+            "data": [1, 0],
+            "dims": [1, 2],
+            "type": "int32"
+          }
+        ]
+      },
+      {
+        "name": "T[2] k=1",
+        "inputs": [
+          {
+            "data": [3, 3, 3, 3, 3, 3],
+            "dims": [3, 2],
+            "type": "float32"
+          }
+        ],
+        "outputs": [
+          {
+            "data": [3, 3],
+            "dims": [1, 2],
+            "type": "float32"
+          },
+          {
+            "data": [0, 0],
+            "dims": [1, 2],
+            "type": "int32"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "topk",
+    "operator": "TopK",
+    "attributes": [
+      { "name": "axis", "data": 1, "type": "int" },
+      { "name": "k", "data": 2, "type": "int" }
+    ],
+    "cases": [
+      {
+        "name": "T[0] k=2",
+        "inputs": [
+          {
+            "data": [
+              3,
+              3,
+              3,
+              3,
+              1,
+              1,
+              2,
+              3,
+              2,
+              3,
+              3,
+              3,
+              -1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              5,
+              6,
+              3,
+              -2,
+              -3,
+              5
+            ],
+            "dims": [2, 3, 4],
+            "type": "float32"
+          }
+        ],
+        "outputs": [
+          {
+            "data": [3, 3, 3, 3, 2, 3, 3, 3, 5, 6, 5, 6, 3, 2, 3, 5],
+
+            "dims": [2, 2, 4],
+            "type": "float32"
+          },
+          {
+            "data": [0, 0, 0, 0, 2, 2, 2, 1, 1, 1, 1, 1, 2, 0, 0, 2],
+            "dims": [2, 2, 4],
+            "type": "int32"
+          }
+        ]
+      }
+    ]
+  }
+]

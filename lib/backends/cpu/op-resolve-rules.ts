@@ -29,6 +29,7 @@ import {CpuSoftmax} from './ops/softmax';
 import {CpuSqueeze} from './ops/squeeze';
 import {CpuSum} from './ops/sum';
 import {CpuTile} from './ops/tile';
+import {CpuTopK} from './ops/topK';
 import {CpuTranspose} from './ops/transpose';
 import * as unaryOps from './ops/unary-op';
 import {CpuUnaryOp} from './ops/unary-op';
@@ -108,6 +109,7 @@ export const CPU_OP_RESOLVE_RULES: ReadonlyArray<OpSet.ResolveRule> = [
   ['Tan', '', '7+', () => new CpuUnaryOp(FLOAT_TYPES, unaryOps.tan)],
   ['Tanh', '', '6+', () => new CpuUnaryOp(FLOAT_TYPES, unaryOps.tanh)],
   ['Tile', '', '6+', () => new CpuTile()],
+  ['TopK', '', '1-9', () => new CpuTopK()],
   ['Transpose', '', '1+', () => new CpuTranspose()],
   ['Unsqueeze', '', '1+', () => new CpuUnsqueeze()],
   ['Upsample', '', '7-8', () => new CpuUpsample(7)],
